@@ -16,6 +16,8 @@ import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.stereotype.Component;
 
 import javax.crypto.SecretKey;
+import java.nio.charset.StandardCharsets;
+import java.security.Key;
 import java.util.Arrays;
 import java.util.Collection;
 import java.util.Date;
@@ -35,7 +37,8 @@ public class JwtTokenProvider {
     @Value("${jwt.refreshTokenDuration}")
     private long refreshTokenDuration;
 
-    SecretKey secretKey = Keys.hmacShaKeyFor(Decoders.BASE64URL.decode(secret));
+    //SecretKey secretKey = Keys.hmacShaKeyFor(Decoders.BASE64URL.decode(secret));
+    SecretKey secretKey = Keys.secretKeyFor(SignatureAlgorithm.HS256);
 
     //A method that generates an AccessToken and a RefreshToken with the user's information
     public LoginResponseDTO generateToken(Authentication authentication) {
@@ -79,7 +82,7 @@ public class JwtTokenProvider {
         Claims claims = parseClaims(accessToken);
 
         if (claims.get(AUTHORITIES_KEY) == null) {
-            throw new RuntimeException("권한 정보가 없는 토큰입니다.");
+            throw new RuntimeException("A token with no privilege information.");
         }
 
         // Get permission information from a claim

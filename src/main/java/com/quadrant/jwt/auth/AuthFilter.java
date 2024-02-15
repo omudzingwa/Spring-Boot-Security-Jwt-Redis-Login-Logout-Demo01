@@ -18,7 +18,7 @@ import org.springframework.web.filter.GenericFilterBean;
 
 import java.io.IOException;
 @Slf4j
-@AllArgsConstructor
+@RequiredArgsConstructor
 public class AuthFilter extends GenericFilterBean {
 
     private final JwtTokenProvider jwtTokenProvider;
@@ -32,7 +32,7 @@ public class AuthFilter extends GenericFilterBean {
 
         // 2. validateToken Validate the token with
         if (token != null && jwtTokenProvider.validateToken(token)) {
-            // (추가) Redis 에 해당 accessToken logout 여부 확인
+            // (more) Check whether Redis has an accessToken equivalent to logout
             String isLogout = (String)redisTemplate.opsForValue().get(token);
             if (ObjectUtils.isEmpty(isLogout)) {
                 // If the token is valid, take the Authentication object from the token and store it in the SecurityContext

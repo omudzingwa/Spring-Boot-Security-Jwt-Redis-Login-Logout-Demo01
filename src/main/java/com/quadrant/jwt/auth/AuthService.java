@@ -18,7 +18,6 @@ import org.springframework.security.core.Authentication;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Component;
-import org.springframework.stereotype.Service;
 
 import java.util.concurrent.TimeUnit;
 
@@ -35,6 +34,7 @@ public class AuthService {
     //private final RedisTemplate<String,String> redisTemplate = new RedisTemplate<>();
 
     public ResponseEntity<?> signUp(SignupRequestDTO signUp) {
+
         if (userRepository.findByUsername(signUp.getUsername()).isPresent()) {
             return new ResponseEntity<>("The username already exists.", HttpStatus.BAD_REQUEST);
         }
@@ -69,8 +69,7 @@ public class AuthService {
         LoginResponseDTO userToken = jwtTokenProvider.generateToken(authentication);
 
         // 4. RefreshToken Redis storage (auto-delete via expirationTime setting)
-        redisTemplate.opsForValue()
-                .set("RT:" + authentication.getName(), userToken.getRefreshToken(), userToken.getRefreshTokenExpirationTime(), TimeUnit.MILLISECONDS);
+        redisTemplate.opsForValue().set("RT:" + authentication.getName(), userToken.getRefreshToken(), userToken.getRefreshTokenExpirationTime(), TimeUnit.MILLISECONDS);
 
         return new ResponseEntity<>("Login successful", HttpStatus.OK);
     }
@@ -98,8 +97,7 @@ public class AuthService {
         LoginResponseDTO userToken= jwtTokenProvider.generateToken(authentication);
 
         // 5. RefreshToken Redis updates
-        redisTemplate.opsForValue()
-                .set("RT:" + authentication.getName(), userToken.getRefreshToken(), userToken.getRefreshTokenExpirationTime(), TimeUnit.MILLISECONDS);
+        redisTemplate.opsForValue().set("RT:" + authentication.getName(), userToken.getRefreshToken(), userToken.getRefreshTokenExpirationTime(), TimeUnit.MILLISECONDS);
 
         return new ResponseEntity<>("Token information has been updated", HttpStatus.OK);
     }

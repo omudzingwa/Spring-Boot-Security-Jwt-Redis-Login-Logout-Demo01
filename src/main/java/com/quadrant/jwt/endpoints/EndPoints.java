@@ -24,10 +24,4 @@ public class EndPoints {
         return "Admin users only";
     }
 
-
-    @GetMapping("/logout")
-    public ResponseEntity<String> logout(){
-        return new ResponseEntity<>("User logged out successfully", HttpStatus.OK);
-    }
-
 }

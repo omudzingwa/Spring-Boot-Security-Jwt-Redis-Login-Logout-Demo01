@@ -30,4 +30,10 @@ public class UserController {
         return new ResponseEntity<>("User deleted", HttpStatus.OK);
     }
 
+    @GetMapping("/find/{username}")
+    public ResponseEntity<?> findByUsername(@PathVariable String username){
+        return new ResponseEntity<>(userService.findByUsername(username),HttpStatus.OK);
+
+    }
+
 }

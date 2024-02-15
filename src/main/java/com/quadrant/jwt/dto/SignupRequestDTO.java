@@ -3,6 +3,7 @@ package com.quadrant.jwt.dto;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
+import org.springframework.security.crypto.password.PasswordEncoder;
 
 @Data
 @Builder
